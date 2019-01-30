@@ -24,14 +24,15 @@ public class Employee {
 	private String gender, dept, phno;
 	private String dob;
 
-	public Employee(String id,String firstName, String middleName, String lastName, String gender, String dob, String phno,
-			String email, String address, String dept) {
+	public Employee(String id,String firstName, String middleName,String lastName, String gender, int age,
+			String dob, String phno,String email, String address, String dept) {
 		this.id = id;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
 		this.gender = gender;
 		this.dob = dob;
+		this.age = age;
 		this.phno = phno;
 		this.email = email;
 		this.address = address;
@@ -42,11 +43,12 @@ public class Employee {
 	}
 
 	public String getName() {
-		return Utility.camelCase(getFirstName() +" "+ getMiddleName() + " " + getLastName());
+		return name; 
+		//Utility.camelCase(getFirstName() +" "+ getMiddleName() + " " + getLastName());
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = Utility.camelCase(getFirstName() +" "+ getMiddleName() + " " + getLastName());;
 	}
 
 	public String getGender() {
