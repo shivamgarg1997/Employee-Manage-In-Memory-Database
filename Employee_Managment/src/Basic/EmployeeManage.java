@@ -3,6 +3,7 @@ package Basic;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -233,23 +234,20 @@ public class EmployeeManage {
 	}
 
 	public void displayInfo() throws IOException {	
-		
-		  if(Mapper.size() == 0){
-			  System.out.println("Currently there is no employee");
-		  } else{
-				 System.out.println("-----------------------------------------------------------------------------------" +
-						 "----------------------------------------------------------------------------");
-		  System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s"
-				  ,"ID","|", "Name","|",
-				  "Gender","|","Age","|","Phno","|","Email","|","Address","|","Dept","|");
-		  System.out.println();
-		  System.out.println("-----------------------------------------------------------------------------------" +
-				  	"----------------------------------------------------------------------------"); 
-		  Iterator<Map.Entry<String, Employee>> itr = Mapper.iterate();
-		  while(itr.hasNext()) {
-				Map.Entry<String, Employee> entry = itr.next(); 
-				Employee p = entry.getValue();
-				  System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s",p.getId(),"|",p.getName(),
+			dao = new DAO();
+			ArrayList<Employee> list = dao.empInfo();
+			Iterator<Employee> itr = list.iterator();
+			System.out.println("-----------------------------------------------------------------------------------" +
+					 "----------------------------------------------------------------------------");
+	  System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s"
+			  ,"ID","|", "Name","|",
+			  "Gender","|","Age","|","Phno","|","Email","|","Address","|","Dept","|");
+	  System.out.println();
+	  System.out.println("-----------------------------------------------------------------------------------" +
+			  	"----------------------------------------------------------------------------");
+			while(itr.hasNext()) {
+				Employee p = itr.next();
+				 System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s",p.getId(),"|",p.getName(),
 						  "|",p.getGender(),"|",Utility.getRealTimeAge(p.getDob()),
 						  "|",p.getPhno(),"|",p.getEmail(),"|"
 						  ,p.getAddress(),"|",p.getDept(),"|");
@@ -257,7 +255,34 @@ public class EmployeeManage {
 			  System.out.println(); } System.out.println();
 			  System.out.println("-------------------------------------------------------------------------------" +
 			  "--------------------------------------------------------------------------------");
-		  }	
+			}
+	
+//		  if(Mapper.size() == 0){
+//			  System.out.println("Currently there is no employee");
+//		  } else{
+//				 System.out.println("-----------------------------------------------------------------------------------" +
+//						 "----------------------------------------------------------------------------");
+//		  System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s"
+//				  ,"ID","|", "Name","|",
+//				  "Gender","|","Age","|","Phno","|","Email","|","Address","|","Dept","|");
+//		  System.out.println();
+//		  System.out.println("-----------------------------------------------------------------------------------" +
+//				  	"----------------------------------------------------------------------------"); 
+//		  //Iterator<Map.Entry<String, Employee>> itr = Mapper.iterate();
+//		  Iterator<Employee> itr = list.iterator();
+//		  while(itr.hasNext()) {
+//				//Map.Entry<String, Employee> entry = itr.next(); 
+//				Employee p = itr.next();
+//			  //Employee p = entry.getValue();
+//				  System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s",p.getId(),"|",p.getName(),
+//						  "|",p.getGender(),"|",Utility.getRealTimeAge(p.getDob()),
+//						  "|",p.getPhno(),"|",p.getEmail(),"|"
+//						  ,p.getAddress(),"|",p.getDept(),"|");
+//				  
+//			  System.out.println(); } System.out.println();
+//			  System.out.println("-------------------------------------------------------------------------------" +
+//			  "--------------------------------------------------------------------------------");
+//		  }	
 	}
 	
 	static void display(Employee p){
