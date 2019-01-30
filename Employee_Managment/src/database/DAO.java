@@ -104,11 +104,10 @@ public class DAO {
 
     public void update(String variable,String id,String val) {
     	try {
-    		String updatequery ="update employee set ? = ? where id = '" + id + "';" ;
-    		PreparedStatement stmt=connection.prepareStatement(updatequery); 
-    		stmt.setString(1,variable);
-    		stmt.setString(2,val);  
-    		stmt.executeUpdate();
+    		String updatequery ="update employee set " + variable + " = '"+ val + "' " +"where id = '" + id + "';" ;
+    		connection = DriverManager.getConnection ("jdbc:h2:~/Employee", "root","infoobjects");
+    		statement  = connection.createStatement();
+    		statement.executeUpdate(updatequery);
     		if(variable.equals("email")) {
     			rs = connection.createStatement().executeQuery("select Phno from employee where ID = '"+ id+ "';" );
     			rs.next();
@@ -121,19 +120,6 @@ public class DAO {
     			String iD = Utility.getMD5(val,rs.getString(1));
     			update("ID",id,iD);
     		}
-    	} catch(Exception ex) {
-    		ex.printStackTrace();
-    	}
-    }
-
-    public boolean idexists(String iD) {
-    	try {
-    		statement = connection.createStatement();
-    		String findquery = "select * from employee where ID = '" + iD + "';";
-    		rs = statement.executeQuery(findquery);
-    		System.out.println("hii");
-    		if(!rs.next())
-    			return false;
     	} catch(Exception ex) {
     		ex.printStackTrace();
     	} finally {
@@ -162,7 +148,46 @@ public class DAO {
                 connection = null;
             }
          }
-    	return true;
+    }
+
+    public Employee idexists(String iD) {
+    	try {
+    		statement = connection.createStatement();
+    		String findquery = "select * from employee where ID = '" + iD + "';";
+    		rs = statement.executeQuery(findquery);
+    		rs.next();
+    		return new Employee(rs.getString(1), rs.getString(2), rs.getString(3),
+    				rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7),
+    				rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11));	
+    	} catch(Exception ex) {
+    		ex.printStackTrace();
+    	} finally {
+    		if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                rs = null;
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                statement = null;
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                connection = null;
+            }
+         }
+    	return null;
     }
     
     public boolean deleteEntry(String iD) {
@@ -204,4 +229,5 @@ public class DAO {
          }
     	return true;
     }
+    
 }

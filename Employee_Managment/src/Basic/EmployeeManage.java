@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 import database.DAO;
 
@@ -43,7 +42,7 @@ public class EmployeeManage {
 				System.out.println("Enter name");
 				tName = br.readLine();
 				if(Utility.isValidName(tName)) {
-					System.out.println("reached");
+				
 					return tName;
 				}
 				else System.out.println("Wrong input");;
@@ -155,14 +154,19 @@ public class EmployeeManage {
 	public void update() throws Exception {
 		try {
 			DAO dao = new DAO();
+			Employee e;	
 			while(true) {
 				System.out.println("Enter the ID of the Employee to be updated\n"
 						+ "For Exit enter 0");
 				String iD = br.readLine();
 				if(iD.equals("0")) {
 					break;
-				} else if(dao.idexists(iD)){
-					Employee e = new Employee();				
+				} else{
+					e = dao.idexists(iD);
+					if(!e.getId().equals(iD)) {
+						System.out.println("No such employee exists \n Please enter again");
+						continue;
+					}	
 					System.out.println("Employee Details");					
 					//display(e);
 					while(true) {
@@ -195,9 +199,7 @@ public class EmployeeManage {
 						}  
 						//display(e);
 					}
-				} else {
-					System.out.println("No such employee exists \n Please enter again");
-				}
+				} 
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
