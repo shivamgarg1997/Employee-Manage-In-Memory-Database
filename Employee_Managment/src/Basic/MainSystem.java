@@ -12,7 +12,7 @@ public class MainSystem {
 			try {
 				BufferedReader br  = new BufferedReader(new InputStreamReader(System.in));
 					
-				System.out.println("What do you want to do? \n" + 
+				System.out.println("\nWhat do you want to do? \n" + 
 					"1. Enter an Employee \n2. Show all Employess \n" + 
 					"3. Update an Employee \n4. Delete an Employee \n5. Exit");
 					

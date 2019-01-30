@@ -6,10 +6,12 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
 
+import database.DAO;
+
 
 public class EmployeeManage {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	
+	DAO dao = null;
 	public void enterEmployee() throws Exception {
 		try {
 			Employee e = new Employee();
@@ -25,6 +27,8 @@ public class EmployeeManage {
 			e.setId(Utility.getMD5(e.getPhno(), e.getEmail()));			
 			e.setAddress(enterAddress()); 
 			e.setDept(enterDept());
+			dao = new DAO();
+			dao.insert(e);
 			Mapper.put(e.getId(),e);	
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -70,7 +74,7 @@ public class EmployeeManage {
 			while(true) {
 				System.out.println("Enter Date Of Birth");			
 				String tDate = br.readLine();
-				if(Utility.isValidDate(tDate,"dd-mm-yyyy")) {
+				if(Utility.isValidDate(tDate,"yyyy-mm-dd")) {
 					return tDate;
 				}
 				else System.out.println("Wrong input ");		
