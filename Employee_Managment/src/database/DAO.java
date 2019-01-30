@@ -1,10 +1,10 @@
 package database;
 
-import java.awt.List;
 import java.sql.*;
 import java.util.ArrayList;
 
 import Basic.Employee;
+import Basic.Utility;
 
 public class DAO {
 	static Connection connection= null;
@@ -23,9 +23,10 @@ public class DAO {
     public void insert(Employee e) throws SQLException {
     	try {
 	    	String insertquery = "INSERT INTO employee VALUES ('" + e.getId() +"','"
-	                 + e.getFirstName() +"'," +e.getMiddleName()+"'," + e.getLastName()+ "','" 
-	    			 + e.getDob() + "'," + e.getAge() + ",'" + e.getGender() + "','" 
+	                 + e.getFirstName() +"','" +e.getMiddleName()+"','" + e.getLastName()+ "','" 
+	    			 + e.getDob() + "'," + Utility.getRealTimeAge(e.getDob()) + ",'" + e.getGender() + "','" 
 	    			 + e.getPhno() + "','" + e.getEmail() + "','" + e.getAddress() + "','" + e.getDept()+"');";
+	    	System.out.println(insertquery);
 	    	statement = connection.createStatement();
 	    	statement.executeUpdate(insertquery);
     	} catch(Exception ex) {
@@ -61,7 +62,7 @@ public class DAO {
     public ArrayList<Employee> empInfo() {
     	ArrayList<Employee> list = new ArrayList<Employee>();
     	try {
-    		String displayquery = "select * fom employee;";
+    		String displayquery = "select * from employee;";
         	statement  = connection.createStatement();
         	rs = statement.executeQuery(displayquery);
         	while(rs.next()) {
@@ -101,10 +102,14 @@ public class DAO {
     	return null;
     }
 
-    public void deleteEntry(String iD) {
+    public boolean deleteEntry(String iD) {
     	try {
-	    	String deletequery = "delete from employee where ID = '" + iD + "';";
-	    	statement = connection.createStatement();
+    		statement = connection.createStatement();
+    		String findquery = "select * from table where ID = '" + iD + "';";
+    		rs = statement.executeQuery(findquery);
+    		if(!rs.next())
+    			return false;
+    		String deletequery = "delete from employee where ID = '" + iD + "';";
 	    	statement.executeUpdate(deletequery);
     	} catch(Exception ex) {
     		ex.printStackTrace();
@@ -134,5 +139,6 @@ public class DAO {
                 connection = null;
             }
          }
+    	return true;
     }
 }

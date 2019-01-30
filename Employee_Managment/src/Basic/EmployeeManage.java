@@ -28,9 +28,9 @@ public class EmployeeManage {
 			e.setId(Utility.getMD5(e.getPhno(), e.getEmail()));			
 			e.setAddress(enterAddress()); 
 			e.setDept(enterDept());
+			System.out.println(e.toString());
 			dao = new DAO();
-			dao.insert(e);
-			Mapper.put(e.getId(),e);	
+			dao.insert(e);	
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -193,96 +193,50 @@ public class EmployeeManage {
 	}
 	
 	public void deleteEmp() throws Exception {
-		while(true){
+		while(true) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			try{
-				System.out.println("Enter the email of the employee to be deleted");
-				String eMail = br.readLine();
-				if(!Utility.isValidEmail(eMail)) {
-					continue;
-				}
-				System.out.println("Enter the Phno of the employee to be deleted");
-				String pHno = br.readLine();
-				if(!Utility.isValidPhnoNumber(pHno)) {
-					continue;
-				}
-				String iD = Utility.getMD5(pHno, eMail);
-				boolean flag = false;
-				
-				Iterator<Map.Entry<String, Employee>> itr = Mapper.iterate();
-				while(itr.hasNext()) {
-					Map.Entry<String, Employee> entry = itr.next(); 
-					if(iD.equals(entry.getKey())){
-						flag = true;
-						Mapper.remove(iD);
-						dao = new DAO();
-						dao.deleteEntry(iD);
-						System.out.println("The Employee has been deleted");
-						break;
-					}
-				}
-				if(!flag){
-					System.out.println("There is no such employee \n Please enter a correct ID");
-				}
-				else 
+				System.out.println("Enter the ID of the employee to be deleted");
+				String iD = br.readLine();
+				dao = new DAO();
+				if(dao.deleteEntry(iD)) {
+					System.out.println("Employee Deleted");
 					break;
-			}catch(Exception e){}
-			finally {
+				} else {
+					System.out.println("Employee doesnt exist");
+				}
+			} catch(Exception e){
+				e.printStackTrace();
+			} finally {
 				br.close();
 			}
 		}
 	}
 
 	public void displayInfo() throws IOException {	
-			dao = new DAO();
-			ArrayList<Employee> list = dao.empInfo();
-			Iterator<Employee> itr = list.iterator();
-			System.out.println("-----------------------------------------------------------------------------------" +
-					 "----------------------------------------------------------------------------");
-	  System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s"
-			  ,"ID","|", "Name","|",
-			  "Gender","|","Age","|","Phno","|","Email","|","Address","|","Dept","|");
-	  System.out.println();
-	  System.out.println("-----------------------------------------------------------------------------------" +
-			  	"----------------------------------------------------------------------------");
-			while(itr.hasNext()) {
-				Employee p = itr.next();
-				 System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s",p.getId(),"|",p.getName(),
-						  "|",p.getGender(),"|",Utility.getRealTimeAge(p.getDob()),
-						  "|",p.getPhno(),"|",p.getEmail(),"|"
-						  ,p.getAddress(),"|",p.getDept(),"|");
-				  
-			  System.out.println(); } System.out.println();
-			  System.out.println("-------------------------------------------------------------------------------" +
-			  "--------------------------------------------------------------------------------");
-			}
-	
-//		  if(Mapper.size() == 0){
-//			  System.out.println("Currently there is no employee");
-//		  } else{
-//				 System.out.println("-----------------------------------------------------------------------------------" +
-//						 "----------------------------------------------------------------------------");
-//		  System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s"
-//				  ,"ID","|", "Name","|",
-//				  "Gender","|","Age","|","Phno","|","Email","|","Address","|","Dept","|");
-//		  System.out.println();
-//		  System.out.println("-----------------------------------------------------------------------------------" +
-//				  	"----------------------------------------------------------------------------"); 
-//		  //Iterator<Map.Entry<String, Employee>> itr = Mapper.iterate();
-//		  Iterator<Employee> itr = list.iterator();
-//		  while(itr.hasNext()) {
-//				//Map.Entry<String, Employee> entry = itr.next(); 
-//				Employee p = itr.next();
-//			  //Employee p = entry.getValue();
-//				  System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s",p.getId(),"|",p.getName(),
-//						  "|",p.getGender(),"|",Utility.getRealTimeAge(p.getDob()),
-//						  "|",p.getPhno(),"|",p.getEmail(),"|"
-//						  ,p.getAddress(),"|",p.getDept(),"|");
-//				  
-//			  System.out.println(); } System.out.println();
-//			  System.out.println("-------------------------------------------------------------------------------" +
-//			  "--------------------------------------------------------------------------------");
-//		  }	
+		dao = new DAO();
+		ArrayList<Employee> list = dao.empInfo();
+		Iterator<Employee> itr = list.iterator();
+		System.out.println("-----------------------------------------------------------------------------------" +
+				 "----------------------------------------------------------------------------");
+		System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s"
+				,"ID","|", "Name","|",
+				"Gender","|","Age","|","Phno","|","Email","|","Address","|","Dept","|");
+		System.out.println();
+		System.out.println("-----------------------------------------------------------------------------------" +
+		  	"----------------------------------------------------------------------------");
+		while(itr.hasNext()) {
+			Employee p = itr.next();
+			 System.out.printf("%33s %2s %15s %2s %10s %2s %5s %2s %10s %2s %30s %2s %15s %2s %10s %2s",p.getId(),"|",p.getParseName(),
+					  "|",p.getGender(),"|",Utility.getRealTimeAge(p.getDob()),
+					  "|",p.getPhno(),"|",p.getEmail(),"|"
+					  ,p.getAddress(),"|",p.getDept(),"|");
+			  
+			 System.out.println();
+		}
+			System.out.println();
+		  System.out.println("-------------------------------------------------------------------------------" +
+		  "--------------------------------------------------------------------------------");
 	}
 	
 	static void display(Employee p){
