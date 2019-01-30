@@ -58,4 +58,39 @@ public class DAO {
     public void empInfo() {
     	
     }
+
+    public void deleteEntry(String iD) {
+    	try {
+	    	String deletequery = "delete from employee where ID = '" + iD + "';";
+	    	statement = connection.createStatement();
+	    	statement.executeUpdate(deletequery);
+    	} catch(Exception ex) {
+    		ex.printStackTrace();
+    	} finally {
+    		if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                rs = null;
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                statement = null;
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                connection = null;
+            }
+         }
+    }
 }

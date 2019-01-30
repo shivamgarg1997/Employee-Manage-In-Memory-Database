@@ -214,6 +214,8 @@ public class EmployeeManage {
 					if(iD.equals(entry.getKey())){
 						flag = true;
 						Mapper.remove(iD);
+						dao = new DAO();
+						dao.deleteEntry(iD);
 						System.out.println("The Employee has been deleted");
 						break;
 					}
