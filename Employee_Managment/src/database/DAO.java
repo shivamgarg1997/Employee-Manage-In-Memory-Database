@@ -102,6 +102,69 @@ public class DAO {
     	return null;
     }
 
+    public void update(String variable,String id,String val) {
+    	try {
+    		String updatequery ="update employee set ? = ? where id = '" + id + "';" ;
+    		PreparedStatement stmt=connection.prepareStatement(updatequery); 
+    		stmt.setString(1,variable);
+    		stmt.setString(2,val);  
+    		stmt.executeUpdate();
+    		if(variable.equals("email")) {
+    			rs = connection.createStatement().executeQuery("select Phno from employee where ID = '"+ id+ "';" );
+    			rs.next();
+    			String iD = Utility.getMD5(rs.getString(1), val);
+    			update("ID",id,iD);
+    			
+    		} else if(variable.equals("Phno")) {
+    			rs = connection.createStatement().executeQuery("select email from employee where ID = '"+ id+ "';" );
+    			rs.next();
+    			String iD = Utility.getMD5(val,rs.getString(1));
+    			update("ID",id,iD);
+    		}
+    	} catch(Exception ex) {
+    		ex.printStackTrace();
+    	}
+    }
+
+    public boolean idexists(String iD) {
+    	try {
+    		statement = connection.createStatement();
+    		String findquery = "select * from employee where ID = '" + iD + "';";
+    		rs = statement.executeQuery(findquery);
+    		System.out.println("hii");
+    		if(!rs.next())
+    			return false;
+    	} catch(Exception ex) {
+    		ex.printStackTrace();
+    	} finally {
+    		if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                rs = null;
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                statement = null;
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                	ex.printStackTrace();
+                	}
+                connection = null;
+            }
+         }
+    	return true;
+    }
+    
     public boolean deleteEntry(String iD) {
     	try {
     		statement = connection.createStatement();

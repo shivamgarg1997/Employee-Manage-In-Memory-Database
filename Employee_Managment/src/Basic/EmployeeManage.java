@@ -43,6 +43,7 @@ public class EmployeeManage {
 				System.out.println("Enter name");
 				tName = br.readLine();
 				if(Utility.isValidName(tName)) {
+					System.out.println("reached");
 					return tName;
 				}
 				else System.out.println("Wrong input");;
@@ -153,14 +154,17 @@ public class EmployeeManage {
 	
 	public void update() throws Exception {
 		try {
+			DAO dao = new DAO();
 			while(true) {
 				System.out.println("Enter the ID of the Employee to be updated\n"
 						+ "For Exit enter 0");
 				String iD = br.readLine();
-				if(Mapper.get(iD) != null){
-					Employee e = Mapper.get(iD);				
+				if(iD.equals("0")) {
+					break;
+				} else if(dao.idexists(iD)){
+					Employee e = new Employee();				
 					System.out.println("Employee Details");					
-					display(e);
+					//display(e);
 					while(true) {
 						System.out.println("what do you want to update \n"
 								+ "1. Name \n2. Address \n3. Phone Number \n4. Department \n"
@@ -171,24 +175,32 @@ public class EmployeeManage {
 							break;
 						} else if(up_res == 1){
 							e.setName(enterName());
+							dao.update("Name",e.getId(),e.getParseName());
+							
 						} else if(up_res == 2){
 							e.setAddress(enterAddress());
+							dao.update("Address",e.getId(),e.getAddress());
+							
 						} else if(up_res == 3){
 							e.setPhno(enterPhno());
+							dao.update("Phno",e.getId(),e.getPhno());
+							
 						} else if(up_res == 4){
 							e.setDept(enterDept());
+							dao.update("dept",e.getId(),e.getDept());
+							
 						} else if(up_res == 5){
 							e.setEmail(enterEmail());
+							dao.update("Email",e.getId(),e.getEmail());
 						}  
-						display(e);
+						//display(e);
 					}
-				}
-				else {
+				} else {
 					System.out.println("No such employee exists \n Please enter again");
 				}
 			}
-		}catch(Exception ex) {
-			System.out.println(ex.toString());
+		} catch(Exception ex) {
+			ex.printStackTrace();
 		}		
 	}
 	
